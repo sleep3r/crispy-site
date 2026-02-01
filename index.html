@@ -5,29 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crispy — Record, Transcribe, and Understand</title>
     <meta name="description" content="Free and open source desktop app for audio recording with transcription, noise suppression, and AI chat">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Load latest release info
-        fetch('release-info.json')
-            .then(response => response.json())
-            .then(data => {
-                const versionElements = document.querySelectorAll('.release-version');
-                versionElements.forEach(el => {
-                    el.textContent = data.version;
-                });
-            })
-            .catch(() => {
-                // Fallback - fetch from GitHub API directly
-                fetch('https://api.github.com/repos/sleep3r/crispy/releases/latest')
-                    .then(response => response.json())
-                    .then(data => {
-                        const versionElements = document.querySelectorAll('.release-version');
-                        versionElements.forEach(el => {
-                            el.textContent = data.tag_name;
-                        });
-                    })
-                    .catch(console.error);
+        function updateReleaseInfo(data) {
+            // Update version display
+            const versionElements = document.querySelectorAll('.release-version');
+            versionElements.forEach(el => {
+                el.textContent = data.version || data.tag_name;
             });
+            
+            // Update download links
+            const assets = data.assets || [];
+            
+            // Find specific assets by file extension/pattern
+            // Prefer aarch64 (Apple Silicon) for macOS
+            const macosAsset = assets.find(a => a.name.includes('aarch64') && a.name.endsWith('.dmg')) 
+                || assets.find(a => a.name.endsWith('.dmg'));
+            
+            // Prefer amd64 (x64) .deb for Debian/Ubuntu
+            const linuxDebAsset = assets.find(a => a.name.includes('amd64') && a.name.endsWith('.deb'))
+                || assets.find(a => a.name.endsWith('.deb'));
+            
+            // Prefer x86_64 rpm for Fedora
+            const linuxRpmAsset = assets.find(a => a.name.includes('x86_64') && a.name.endsWith('.rpm'))
+                || assets.find(a => a.name.endsWith('.rpm'));
+            
+            // Prefer x64 setup.exe for Windows
+            const windowsX64Asset = assets.find(a => a.name.includes('x64') && a.name.endsWith('-setup.exe'))
+                || assets.find(a => a.name.includes('x64') && a.name.endsWith('.msi'))
+                || assets.find(a => a.name.includes('x64') && a.name.endsWith('.exe'));
+
+            // Prefer arm64 setup.exe for Windows ARM
+            const windowsArmAsset = assets.find(a => a.name.includes('arm64') && a.name.endsWith('-setup.exe'))
+                || assets.find(a => a.name.includes('arm64') && a.name.endsWith('.msi'))
+                || assets.find(a => a.name.includes('arm64') && a.name.endsWith('.exe'));
+            
+            // Update macOS link
+            if (macosAsset) {
+                const macosLink = document.getElementById('download-macos');
+                if (macosLink) macosLink.href = macosAsset.browser_download_url;
+            }
+            
+            // Update Debian/Ubuntu link
+            if (linuxDebAsset) {
+                const linuxDebLink = document.getElementById('download-linux-deb');
+                if (linuxDebLink) linuxDebLink.href = linuxDebAsset.browser_download_url;
+            }
+            
+            // Update Fedora link
+            if (linuxRpmAsset) {
+                const linuxRpmLink = document.getElementById('download-linux-rpm');
+                if (linuxRpmLink) linuxRpmLink.href = linuxRpmAsset.browser_download_url;
+            }
+            
+            // Update Windows x64 link
+            if (windowsX64Asset) {
+                const windowsX64Link = document.getElementById('download-windows-x64');
+                if (windowsX64Link) windowsX64Link.href = windowsX64Asset.browser_download_url;
+            }
+
+            // Update Windows ARM64 link
+            if (windowsArmAsset) {
+                const windowsArmLink = document.getElementById('download-windows-arm');
+                if (windowsArmLink) windowsArmLink.href = windowsArmAsset.browser_download_url;
+            }
+        }
+        
+        async function fetchJson(url) {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch ${url}: ${response.status}`);
+            }
+            return response.json();
+        }
+
+        globalThis.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const data = await fetchJson('release-info.json');
+                updateReleaseInfo(data);
+                return;
+            } catch (error) {
+                console.warn('release-info.json not available', error);
+            }
+
+            try {
+                const data = await fetchJson('https://api.github.com/repos/sleep3r/crispy/releases/latest');
+                updateReleaseInfo(data);
+                return;
+            } catch (error) {
+                console.warn('GitHub latest release not available', error);
+            }
+
+            try {
+                const releases = await fetchJson('https://api.github.com/repos/sleep3r/crispy/releases');
+                if (Array.isArray(releases) && releases.length > 0) {
+                    updateReleaseInfo(releases[0]);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -52,13 +131,40 @@
         .hover-lift:hover {
             transform: translateY(-2px);
         }
+
+        .download-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 180px;
+        }
+
+        .download-card-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            min-height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .download-card-subtitle {
+            font-size: 0.875rem;
+            color: rgba(0, 0, 0, 0.6);
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="bg-white text-black antialiased">
     <!-- Header -->
     <header class="border-b border-black/10">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div class="text-2xl font-semibold tracking-tight">Crispy</div>
+        <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+            <img src="logo.png" alt="Crispy" class="h-12">
             <nav class="flex items-center gap-8">
                 <a href="#features" class="text-sm hover:text-black/70 transition-colors">Features</a>
                 <a href="#download" class="text-sm hover:text-black/70 transition-colors">Download</a>
@@ -77,7 +183,7 @@
                 Free and open source desktop app for high-quality audio recording with AI-powered transcription, noise suppression, and intelligent chat
             </p>
             <div class="pt-4">
-                <a href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="inline-flex items-center gap-2 px-8 py-3 bg-black text-white rounded-lg hover:bg-black/80 transition-colors text-base font-medium hover-lift">
+                <a href="#download" class="inline-flex items-center gap-2 px-8 py-3 bg-black text-white rounded-lg hover:bg-black/80 transition-colors text-base font-medium hover-lift">
                     Download Crispy
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -168,27 +274,39 @@
         <div class="max-w-3xl mx-auto text-center space-y-8">
             <h2 class="text-4xl font-bold">Download</h2>
             <p class="text-black/60">
-                Available for macOS (Apple Silicon), Linux, and Windows
+                Available for macOS, Debian/Ubuntu, Fedora, and Windows
                 <span class="release-version text-sm font-mono ml-2"></span>
             </p>
             
-            <div class="grid md:grid-cols-3 gap-4 pt-4">
-                <a href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
+            <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-4 pt-4">
+                <a id="download-macos" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
                     <div class="text-3xl mb-3">🍎</div>
-                    <div class="font-semibold mb-1">macOS</div>
-                    <div class="text-sm text-black/60">Apple Silicon (M1+)</div>
+                    <div class="download-card-title">macOS</div>
+                    <div class="download-card-subtitle">Apple Silicon (M1+)</div>
                 </a>
 
-                <a href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
+                <a id="download-linux-deb" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
                     <div class="text-3xl mb-3">🐧</div>
-                    <div class="font-semibold mb-1">Linux</div>
-                    <div class="text-sm text-black/60">.deb, .rpm, AppImage</div>
+                    <div class="download-card-title">Debian/Ubuntu</div>
+                    <div class="download-card-subtitle">.deb (x64)</div>
                 </a>
 
-                <a href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
+                <a id="download-linux-rpm" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
+                    <div class="text-3xl mb-3">🦊</div>
+                    <div class="download-card-title">Fedora</div>
+                    <div class="download-card-subtitle">.rpm (x86_64)</div>
+                </a>
+
+                <a id="download-windows-x64" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
                     <div class="text-3xl mb-3">🪟</div>
-                    <div class="font-semibold mb-1">Windows</div>
-                    <div class="text-sm text-black/60">x64 & ARM64</div>
+                    <div class="download-card-title">Windows</div>
+                    <div class="download-card-subtitle">x64</div>
+                </a>
+
+                <a id="download-windows-arm" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
+                    <div class="text-3xl mb-3">🪟</div>
+                    <div class="download-card-title">Windows</div>
+                    <div class="download-card-subtitle">ARM64</div>
                 </a>
             </div>
 
