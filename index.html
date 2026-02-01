@@ -138,7 +138,13 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            min-height: 180px;
+            min-height: 140px;
+        }
+
+        @media (min-width: 768px) {
+            .download-card {
+                min-height: 180px;
+            }
         }
 
         .download-card-title {
@@ -148,42 +154,75 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        @media (min-width: 640px) {
+            .download-card-title {
+                font-size: 1rem;
+            }
         }
 
         .download-card-subtitle {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             color: rgba(0, 0, 0, 0.6);
-            min-height: 2.5rem;
+            min-height: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        @media (min-width: 640px) {
+            .download-card-subtitle {
+                font-size: 0.875rem;
+                min-height: 2.5rem;
+            }
+        }
+
+        .download-card-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .download-card-emoji {
+                font-size: 2.5rem;
+                margin-bottom: 0.75rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .download-card-emoji {
+                font-size: 3rem;
+                margin-bottom: 0.75rem;
+            }
         }
     </style>
 </head>
 <body class="bg-white text-black antialiased">
     <!-- Header -->
     <header class="border-b border-black/10">
-        <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-            <img src="logo.png" alt="Crispy" class="h-12">
-            <nav class="flex items-center gap-8">
-                <a href="#features" class="text-sm hover:text-black/70 transition-colors">Features</a>
-                <a href="#download" class="text-sm hover:text-black/70 transition-colors">Download</a>
-                <a href="https://github.com/sleep3r/crispy" target="_blank" class="text-sm hover:text-black/70 transition-colors">GitHub</a>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <img src="logo.png" alt="Crispy" class="h-8 sm:h-10 md:h-12">
+            <nav class="flex items-center gap-4 sm:gap-6 md:gap-8">
+                <a href="#features" class="text-xs sm:text-sm hover:text-black/70 transition-colors">Features</a>
+                <a href="#download" class="text-xs sm:text-sm hover:text-black/70 transition-colors">Download</a>
+                <a href="https://github.com/sleep3r/crispy" target="_blank" class="text-xs sm:text-sm hover:text-black/70 transition-colors">GitHub</a>
             </nav>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="max-w-6xl mx-auto px-6 py-24 fade-in">
-        <div class="max-w-3xl mx-auto text-center space-y-6">
-            <h1 class="text-6xl font-bold tracking-tight leading-tight">
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24 fade-in">
+        <div class="max-w-3xl mx-auto text-center space-y-4 sm:space-y-6">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight">
                 record, transcribe,<br/>and understand
             </h1>
-            <p class="text-xl text-black/60 max-w-2xl mx-auto leading-relaxed">
+            <p class="text-base sm:text-lg md:text-xl text-black/60 max-w-2xl mx-auto leading-relaxed px-4 sm:px-0">
                 Free and open source desktop app for high-quality audio recording with AI-powered transcription, noise suppression, and intelligent chat
             </p>
-            <div class="pt-4">
-                <a href="#download" class="inline-flex items-center gap-2 px-8 py-3 bg-black text-white rounded-lg hover:bg-black/80 transition-colors text-base font-medium hover-lift">
+            <div class="pt-2 sm:pt-4">
+                <a href="#download" class="inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 bg-black text-white rounded-lg hover:bg-black/80 transition-colors text-sm sm:text-base font-medium hover-lift">
                     Download Crispy
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -194,74 +233,74 @@
     </section>
 
     <!-- Screenshot -->
-    <section class="max-w-4xl mx-auto px-6 py-12 fade-in">
-        <div class="rounded-2xl border border-black/10 overflow-hidden shadow-2xl">
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 fade-in">
+        <div class="rounded-xl sm:rounded-2xl border border-black/10 overflow-hidden shadow-2xl">
             <img src="screenshot.png" alt="Crispy App Interface" class="w-full h-auto">
         </div>
     </section>
 
     <!-- Features Grid -->
-    <section id="features" class="max-w-6xl mx-auto px-6 py-24 fade-in">
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div class="space-y-3">
-                <div class="text-3xl">🎙️</div>
-                <h3 class="text-xl font-semibold">High Quality Recording</h3>
+    <section id="features" class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24 fade-in">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <div class="space-y-2 sm:space-y-3">
+                <div class="text-2xl sm:text-3xl">🎙️</div>
+                <h3 class="text-lg sm:text-xl font-semibold">High Quality Recording</h3>
                 <p class="text-black/60 text-sm leading-relaxed">
                     Record microphone and application audio simultaneously in 48kHz stereo with real-time mixing
                 </p>
             </div>
 
-            <div class="space-y-3">
-                <div class="text-3xl">🔇</div>
-                <h3 class="text-xl font-semibold">Noise Suppression</h3>
+            <div class="space-y-2 sm:space-y-3">
+                <div class="text-2xl sm:text-3xl">🔇</div>
+                <h3 class="text-lg sm:text-xl font-semibold">Noise Suppression</h3>
                 <p class="text-black/60 text-sm leading-relaxed">
                     Built-in RNNoise-based noise suppression for clean audio processing in any environment
                 </p>
             </div>
 
-            <div class="space-y-3">
-                <div class="text-3xl">✍️</div>
-                <h3 class="text-xl font-semibold">AI Transcription</h3>
+            <div class="space-y-2 sm:space-y-3">
+                <div class="text-2xl sm:text-3xl">✍️</div>
+                <h3 class="text-lg sm:text-xl font-semibold">AI Transcription</h3>
                 <p class="text-black/60 text-sm leading-relaxed">
                     Choose from Whisper, Parakeet, or Moonshine models for accurate speech-to-text transcription
                 </p>
             </div>
 
-            <div class="space-y-3">
-                <div class="text-3xl">💬</div>
-                <h3 class="text-xl font-semibold">Chat with AI</h3>
+            <div class="space-y-2 sm:space-y-3">
+                <div class="text-2xl sm:text-3xl">💬</div>
+                <h3 class="text-lg sm:text-xl font-semibold">Chat with AI</h3>
                 <p class="text-black/60 text-sm leading-relaxed">
                     Ask questions about your transcriptions using OpenAI-compatible LLMs with streaming responses
                 </p>
             </div>
 
-            <div class="space-y-3">
-                <div class="text-3xl">🔒</div>
-                <h3 class="text-xl font-semibold">Private</h3>
+            <div class="space-y-2 sm:space-y-3">
+                <div class="text-2xl sm:text-3xl">🔒</div>
+                <h3 class="text-lg sm:text-xl font-semibold">Private</h3>
                 <p class="text-black/60 text-sm leading-relaxed">
                     All transcription happens locally on your machine. Your audio never leaves your computer
                 </p>
             </div>
 
-            <div class="space-y-3">
-                <div class="text-3xl">⚡</div>
-                <h3 class="text-xl font-semibold">Fast & Native</h3>
+            <div class="space-y-2 sm:space-y-3">
+                <div class="text-2xl sm:text-3xl">⚡</div>
+                <h3 class="text-lg sm:text-xl font-semibold">Fast & Native</h3>
                 <p class="text-black/60 text-sm leading-relaxed">
                     Built with Rust and Tauri for native performance and minimal resource usage
                 </p>
             </div>
 
-            <div class="space-y-3">
-                <div class="text-3xl">🎨</div>
-                <h3 class="text-xl font-semibold">Simple & Clean</h3>
+            <div class="space-y-2 sm:space-y-3">
+                <div class="text-2xl sm:text-3xl">🎨</div>
+                <h3 class="text-lg sm:text-xl font-semibold">Simple & Clean</h3>
                 <p class="text-black/60 text-sm leading-relaxed">
                     Minimalist interface focused on your workflow. One-click recording from the system tray
                 </p>
             </div>
 
-            <div class="space-y-3">
-                <div class="text-3xl">🌐</div>
-                <h3 class="text-xl font-semibold">Open Source</h3>
+            <div class="space-y-2 sm:space-y-3">
+                <div class="text-2xl sm:text-3xl">🌐</div>
+                <h3 class="text-lg sm:text-xl font-semibold">Open Source</h3>
                 <p class="text-black/60 text-sm leading-relaxed">
                     MIT licensed. Contribute, extend, and make it yours. Built by the community, for the community
                 </p>
@@ -270,47 +309,47 @@
     </section>
 
     <!-- Download Section -->
-    <section id="download" class="max-w-6xl mx-auto px-6 py-24 fade-in">
-        <div class="max-w-3xl mx-auto text-center space-y-8">
-            <h2 class="text-4xl font-bold">Download</h2>
-            <p class="text-black/60">
+    <section id="download" class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24 fade-in">
+        <div class="max-w-3xl mx-auto text-center space-y-6 sm:space-y-8">
+            <h2 class="text-3xl sm:text-4xl font-bold">Download</h2>
+            <p class="text-sm sm:text-base text-black/60 px-4 sm:px-0">
                 Available for macOS, Debian/Ubuntu, Fedora, and Windows
-                <span class="release-version text-sm font-mono ml-2"></span>
+                <span class="release-version text-xs sm:text-sm font-mono ml-2"></span>
             </p>
             
-            <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-4 pt-4">
-                <a id="download-macos" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
-                    <div class="text-3xl mb-3">🍎</div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 pt-4">
+                <a id="download-macos" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-3 sm:p-4 md:p-6 hover:border-black/30 transition-all hover-lift">
+                    <div class="download-card-emoji">🍎</div>
                     <div class="download-card-title">macOS</div>
                     <div class="download-card-subtitle">Apple Silicon (M1+)</div>
                 </a>
 
-                <a id="download-linux-deb" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
-                    <div class="text-3xl mb-3">🐧</div>
+                <a id="download-linux-deb" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-3 sm:p-4 md:p-6 hover:border-black/30 transition-all hover-lift">
+                    <div class="download-card-emoji">🐧</div>
                     <div class="download-card-title">Debian/Ubuntu</div>
                     <div class="download-card-subtitle">.deb (x64)</div>
                 </a>
 
-                <a id="download-linux-rpm" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
-                    <div class="text-3xl mb-3">🦊</div>
+                <a id="download-linux-rpm" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-3 sm:p-4 md:p-6 hover:border-black/30 transition-all hover-lift">
+                    <div class="download-card-emoji">🦊</div>
                     <div class="download-card-title">Fedora</div>
                     <div class="download-card-subtitle">.rpm (x86_64)</div>
                 </a>
 
-                <a id="download-windows-x64" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
-                    <div class="text-3xl mb-3">🪟</div>
+                <a id="download-windows-x64" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-3 sm:p-4 md:p-6 hover:border-black/30 transition-all hover-lift">
+                    <div class="download-card-emoji">🪟</div>
                     <div class="download-card-title">Windows</div>
                     <div class="download-card-subtitle">x64</div>
                 </a>
 
-                <a id="download-windows-arm" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
-                    <div class="text-3xl mb-3">🪟</div>
+                <a id="download-windows-arm" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-3 sm:p-4 md:p-6 hover:border-black/30 transition-all hover-lift">
+                    <div class="download-card-emoji">🪟</div>
                     <div class="download-card-title">Windows</div>
                     <div class="download-card-subtitle">ARM64</div>
                 </a>
             </div>
 
-            <p class="text-sm text-black/60 pt-4">
+            <p class="text-xs sm:text-sm text-black/60 pt-4 px-4 sm:px-0">
                 Or build from source: 
                 <a href="https://github.com/sleep3r/crispy" class="underline hover:text-black transition-colors">GitHub Repository</a>
             </p>
@@ -318,13 +357,13 @@
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-black/10 mt-24">
-        <div class="max-w-6xl mx-auto px-6 py-12">
+    <footer class="border-t border-black/10 mt-12 sm:mt-16 md:mt-24">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="text-sm text-black/60">
+                <div class="text-xs sm:text-sm text-black/60">
                     Made with ❤️ by the Crispy community
                 </div>
-                <div class="flex items-center gap-6 text-sm">
+                <div class="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm">
                     <a href="https://github.com/sleep3r/crispy" target="_blank" class="text-black/60 hover:text-black transition-colors">
                         GitHub
                     </a>
