@@ -1,0 +1,42 @@
+name: Update Website Release Info
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-release-info:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get latest release info
+        id: release
+        run: |
+          RELEASE_TAG="${{ github.event.release.tag_name }}"
+          RELEASE_NAME="${{ github.event.release.name }}"
+          
+          # Get download URLs for assets
+          ASSETS=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases/latest" | jq -r '.assets[] | {name: .name, url: .browser_download_url}')
+          
+          # Create JSON with release info
+          cat > crispy-site/release-info.json <<EOF
+          {
+            "version": "$RELEASE_TAG",
+            "name": "$RELEASE_NAME",
+            "published_at": "${{ github.event.release.published_at }}",
+            "html_url": "${{ github.event.release.html_url }}",
+            "assets": $(echo "$ASSETS" | jq -s '.')
+          }
+          EOF
+          
+          cat crispy-site/release-info.json
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add crispy-site/release-info.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update release info to ${{ github.event.release.tag_name }}" && git push)

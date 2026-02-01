@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crispy — Record, Transcribe, and Understand</title>
+    <meta name="description" content="Free and open source desktop app for audio recording with transcription, noise suppression, and AI chat">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Load latest release info
+        fetch('release-info.json')
+            .then(response => response.json())
+            .then(data => {
+                const versionElements = document.querySelectorAll('.release-version');
+                versionElements.forEach(el => {
+                    el.textContent = data.version;
+                });
+            })
+            .catch(() => {
+                // Fallback - fetch from GitHub API directly
+                fetch('https://api.github.com/repos/sleep3r/crispy/releases/latest')
+                    .then(response => response.json())
+                    .then(data => {
+                        const versionElements = document.querySelectorAll('.release-version');
+                        versionElements.forEach(el => {
+                            el.textContent = data.tag_name;
+                        });
+                    })
+                    .catch(console.error);
+            });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hover-lift {
+            transition: transform 0.2s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-white text-black antialiased">
+    <!-- Header -->
+    <header class="border-b border-black/10">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="text-2xl font-semibold tracking-tight">Crispy</div>
+            <nav class="flex items-center gap-8">
+                <a href="#features" class="text-sm hover:text-black/70 transition-colors">Features</a>
+                <a href="#download" class="text-sm hover:text-black/70 transition-colors">Download</a>
+                <a href="https://github.com/sleep3r/crispy" target="_blank" class="text-sm hover:text-black/70 transition-colors">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="max-w-6xl mx-auto px-6 py-24 fade-in">
+        <div class="max-w-3xl mx-auto text-center space-y-6">
+            <h1 class="text-6xl font-bold tracking-tight leading-tight">
+                record, transcribe,<br/>and understand
+            </h1>
+            <p class="text-xl text-black/60 max-w-2xl mx-auto leading-relaxed">
+                Free and open source desktop app for high-quality audio recording with AI-powered transcription, noise suppression, and intelligent chat
+            </p>
+            <div class="pt-4">
+                <a href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="inline-flex items-center gap-2 px-8 py-3 bg-black text-white rounded-lg hover:bg-black/80 transition-colors text-base font-medium hover-lift">
+                    Download Crispy
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshot -->
+    <section class="max-w-4xl mx-auto px-6 py-12 fade-in">
+        <div class="rounded-2xl border border-black/10 overflow-hidden shadow-2xl">
+            <img src="screenshot.png" alt="Crispy App Interface" class="w-full h-auto">
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section id="features" class="max-w-6xl mx-auto px-6 py-24 fade-in">
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="space-y-3">
+                <div class="text-3xl">🎙️</div>
+                <h3 class="text-xl font-semibold">High Quality Recording</h3>
+                <p class="text-black/60 text-sm leading-relaxed">
+                    Record microphone and application audio simultaneously in 48kHz stereo with real-time mixing
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="text-3xl">🔇</div>
+                <h3 class="text-xl font-semibold">Noise Suppression</h3>
+                <p class="text-black/60 text-sm leading-relaxed">
+                    Built-in RNNoise-based noise suppression for clean audio processing in any environment
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="text-3xl">✍️</div>
+                <h3 class="text-xl font-semibold">AI Transcription</h3>
+                <p class="text-black/60 text-sm leading-relaxed">
+                    Choose from Whisper, Parakeet, or Moonshine models for accurate speech-to-text transcription
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="text-3xl">💬</div>
+                <h3 class="text-xl font-semibold">Chat with AI</h3>
+                <p class="text-black/60 text-sm leading-relaxed">
+                    Ask questions about your transcriptions using OpenAI-compatible LLMs with streaming responses
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="text-3xl">🔒</div>
+                <h3 class="text-xl font-semibold">Private</h3>
+                <p class="text-black/60 text-sm leading-relaxed">
+                    All transcription happens locally on your machine. Your audio never leaves your computer
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="text-3xl">⚡</div>
+                <h3 class="text-xl font-semibold">Fast & Native</h3>
+                <p class="text-black/60 text-sm leading-relaxed">
+                    Built with Rust and Tauri for native performance and minimal resource usage
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="text-3xl">🎨</div>
+                <h3 class="text-xl font-semibold">Simple & Clean</h3>
+                <p class="text-black/60 text-sm leading-relaxed">
+                    Minimalist interface focused on your workflow. One-click recording from the system tray
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="text-3xl">🌐</div>
+                <h3 class="text-xl font-semibold">Open Source</h3>
+                <p class="text-black/60 text-sm leading-relaxed">
+                    MIT licensed. Contribute, extend, and make it yours. Built by the community, for the community
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="max-w-6xl mx-auto px-6 py-24 fade-in">
+        <div class="max-w-3xl mx-auto text-center space-y-8">
+            <h2 class="text-4xl font-bold">Download</h2>
+            <p class="text-black/60">
+                Available for macOS (Apple Silicon), Linux, and Windows
+                <span class="release-version text-sm font-mono ml-2"></span>
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-4 pt-4">
+                <a href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
+                    <div class="text-3xl mb-3">🍎</div>
+                    <div class="font-semibold mb-1">macOS</div>
+                    <div class="text-sm text-black/60">Apple Silicon (M1+)</div>
+                </a>
+
+                <a href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
+                    <div class="text-3xl mb-3">🐧</div>
+                    <div class="font-semibold mb-1">Linux</div>
+                    <div class="text-sm text-black/60">.deb, .rpm, AppImage</div>
+                </a>
+
+                <a href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="border border-black/10 rounded-lg p-6 hover:border-black/30 transition-all hover-lift">
+                    <div class="text-3xl mb-3">🪟</div>
+                    <div class="font-semibold mb-1">Windows</div>
+                    <div class="text-sm text-black/60">x64 & ARM64</div>
+                </a>
+            </div>
+
+            <p class="text-sm text-black/60 pt-4">
+                Or build from source: 
+                <a href="https://github.com/sleep3r/crispy" class="underline hover:text-black transition-colors">GitHub Repository</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-black/10 mt-24">
+        <div class="max-w-6xl mx-auto px-6 py-12">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-sm text-black/60">
+                    Made with ❤️ by the Crispy community
+                </div>
+                <div class="flex items-center gap-6 text-sm">
+                    <a href="https://github.com/sleep3r/crispy" target="_blank" class="text-black/60 hover:text-black transition-colors">
+                        GitHub
+                    </a>
+                    <a href="https://github.com/sleep3r/crispy/issues" target="_blank" class="text-black/60 hover:text-black transition-colors">
+                        Issues
+                    </a>
+                    <a href="https://github.com/sleep3r/crispy/blob/main/LICENSE" target="_blank" class="text-black/60 hover:text-black transition-colors">
+                        MIT License
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
