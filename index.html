@@ -16,60 +16,93 @@
                 el.textContent = data.version || data.tag_name;
             });
             
-            // Update download links
             const assets = data.assets || [];
             
-            // Find specific assets by file extension/pattern
-            // Prefer aarch64 (Apple Silicon) for macOS
-            const macosAsset = assets.find(a => a.name.includes('aarch64') && a.name.endsWith('.dmg')) 
-                || assets.find(a => a.name.endsWith('.dmg'));
+            // Group assets by platform
+            const macosAssets = assets.filter(a => a.name.endsWith('.dmg'));
+            const windowsAssets = assets.filter(a => 
+                a.name.endsWith('-setup.exe') || a.name.endsWith('.msi') || a.name.endsWith('.exe')
+            );
+            const linuxAssets = assets.filter(a => 
+                a.name.endsWith('.deb') || a.name.endsWith('.rpm') || a.name.endsWith('.AppImage')
+            );
             
-            // Prefer amd64 (x64) .deb for Debian/Ubuntu
-            const linuxDebAsset = assets.find(a => a.name.includes('amd64') && a.name.endsWith('.deb'))
-                || assets.find(a => a.name.endsWith('.deb'));
-            
-            // Prefer x86_64 rpm for Fedora
-            const linuxRpmAsset = assets.find(a => a.name.includes('x86_64') && a.name.endsWith('.rpm'))
-                || assets.find(a => a.name.endsWith('.rpm'));
-            
-            // Prefer x64 setup.exe for Windows
-            const windowsX64Asset = assets.find(a => a.name.includes('x64') && a.name.endsWith('-setup.exe'))
-                || assets.find(a => a.name.includes('x64') && a.name.endsWith('.msi'))
-                || assets.find(a => a.name.includes('x64') && a.name.endsWith('.exe'));
-
-            // Prefer arm64 setup.exe for Windows ARM
-            const windowsArmAsset = assets.find(a => a.name.includes('arm64') && a.name.endsWith('-setup.exe'))
-                || assets.find(a => a.name.includes('arm64') && a.name.endsWith('.msi'))
-                || assets.find(a => a.name.includes('arm64') && a.name.endsWith('.exe'));
-            
-            // Update macOS link
-            if (macosAsset) {
-                const macosLink = document.getElementById('download-macos');
-                if (macosLink) macosLink.href = macosAsset.browser_download_url;
+            // Helper function to create download button
+            function createDownloadButton(asset, label, description) {
+                const button = document.createElement('a');
+                button.href = asset.browser_download_url;
+                button.target = '_blank';
+                button.className = 'flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 bg-black/5 hover:bg-black/10 rounded-lg transition-all hover-lift';
+                button.innerHTML = `
+                    <div class="flex flex-col">
+                        <span class="font-medium text-sm sm:text-base">${label}</span>
+                        <span class="text-xs sm:text-sm text-black/60">${description}</span>
+                    </div>
+                    <span class="text-xs sm:text-sm text-black/60">${asset.name.split('.').pop()}</span>
+                `;
+                return button;
             }
             
-            // Update Debian/Ubuntu link
-            if (linuxDebAsset) {
-                const linuxDebLink = document.getElementById('download-linux-deb');
-                if (linuxDebLink) linuxDebLink.href = linuxDebAsset.browser_download_url;
+            // Populate macOS downloads
+            const macosContainer = document.getElementById('macos-downloads');
+            if (macosContainer && macosAssets.length > 0) {
+                macosContainer.innerHTML = '';
+                macosAssets.forEach(asset => {
+                    const arch = asset.name.includes('aarch64') ? 'Apple Silicon (M1+)' : 'Intel (x86)';
+                    const label = arch;
+                    macosContainer.appendChild(createDownloadButton(asset, label, asset.name));
+                });
             }
             
-            // Update Fedora link
-            if (linuxRpmAsset) {
-                const linuxRpmLink = document.getElementById('download-linux-rpm');
-                if (linuxRpmLink) linuxRpmLink.href = linuxRpmAsset.browser_download_url;
+            // Populate Windows downloads
+            const windowsContainer = document.getElementById('windows-downloads');
+            if (windowsContainer && windowsAssets.length > 0) {
+                windowsContainer.innerHTML = '';
+                
+                // Group by architecture
+                const x64Assets = windowsAssets.filter(a => a.name.includes('x64'));
+                const arm64Assets = windowsAssets.filter(a => a.name.includes('arm64'));
+                
+                // x64 assets
+                x64Assets.forEach(asset => {
+                    const fileType = asset.name.endsWith('.msi') ? 'MSI Installer' : 'Setup Installer';
+                    windowsContainer.appendChild(createDownloadButton(asset, `x64 - ${fileType}`, asset.name));
+                });
+                
+                // ARM64 assets
+                arm64Assets.forEach(asset => {
+                    const fileType = asset.name.endsWith('.msi') ? 'MSI Installer' : 'Setup Installer';
+                    windowsContainer.appendChild(createDownloadButton(asset, `ARM64 - ${fileType}`, asset.name));
+                });
             }
             
-            // Update Windows x64 link
-            if (windowsX64Asset) {
-                const windowsX64Link = document.getElementById('download-windows-x64');
-                if (windowsX64Link) windowsX64Link.href = windowsX64Asset.browser_download_url;
-            }
-
-            // Update Windows ARM64 link
-            if (windowsArmAsset) {
-                const windowsArmLink = document.getElementById('download-windows-arm');
-                if (windowsArmLink) windowsArmLink.href = windowsArmAsset.browser_download_url;
+            // Populate Linux downloads
+            const linuxContainer = document.getElementById('linux-downloads');
+            if (linuxContainer && linuxAssets.length > 0) {
+                linuxContainer.innerHTML = '';
+                
+                // Sort: .deb, .rpm, .AppImage
+                const debAssets = linuxAssets.filter(a => a.name.endsWith('.deb'));
+                const rpmAssets = linuxAssets.filter(a => a.name.endsWith('.rpm'));
+                const appimageAssets = linuxAssets.filter(a => a.name.endsWith('.AppImage'));
+                
+                // .deb files
+                debAssets.forEach(asset => {
+                    const arch = asset.name.includes('amd64') ? 'x64' : asset.name.includes('arm64') ? 'ARM64' : 'aarch64';
+                    linuxContainer.appendChild(createDownloadButton(asset, `Debian/Ubuntu (${arch})`, asset.name));
+                });
+                
+                // .rpm files
+                rpmAssets.forEach(asset => {
+                    const arch = asset.name.includes('x86_64') ? 'x86_64' : 'aarch64';
+                    linuxContainer.appendChild(createDownloadButton(asset, `Fedora/RHEL (${arch})`, asset.name));
+                });
+                
+                // AppImage files
+                appimageAssets.forEach(asset => {
+                    const arch = asset.name.includes('amd64') ? 'x64' : 'aarch64';
+                    linuxContainer.appendChild(createDownloadButton(asset, `AppImage (${arch})`, asset.name));
+                });
             }
         }
         
@@ -132,71 +165,7 @@
             transform: translateY(-2px);
         }
 
-        .download-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            min-height: 140px;
-        }
-
-        @media (min-width: 768px) {
-            .download-card {
-                min-height: 180px;
-            }
-        }
-
-        .download-card-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            min-height: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-        }
-
-        @media (min-width: 640px) {
-            .download-card-title {
-                font-size: 1rem;
-            }
-        }
-
-        .download-card-subtitle {
-            font-size: 0.75rem;
-            color: rgba(0, 0, 0, 0.6);
-            min-height: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (min-width: 640px) {
-            .download-card-subtitle {
-                font-size: 0.875rem;
-                min-height: 2.5rem;
-            }
-        }
-
-        .download-card-emoji {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        @media (min-width: 640px) {
-            .download-card-emoji {
-                font-size: 2.5rem;
-                margin-bottom: 0.75rem;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .download-card-emoji {
-                font-size: 3rem;
-                margin-bottom: 0.75rem;
-            }
-        }
+        /* Download section styles - no longer needed, using Tailwind utility classes */
     </style>
 </head>
 <body class="bg-white text-black antialiased">
@@ -344,44 +313,38 @@
     </section>
 
     <!-- Download Section -->
-    <section id="download" class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24 fade-in">
-        <div class="max-w-3xl mx-auto text-center space-y-6 sm:space-y-8">
+    <section id="download" class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24 fade-in">
+        <div class="text-center space-y-6 sm:space-y-8">
             <h2 class="text-3xl sm:text-4xl font-bold">Start recording smarter. For free.</h2>
             <p class="text-sm sm:text-base text-black/60 px-4 sm:px-0">
                 No credit card. No trials. No limits. Download once, use forever.
                 <span class="release-version text-xs sm:text-sm font-mono ml-2 inline-block mt-1"></span>
             </p>
             
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 pt-4">
-                <a id="download-macos" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-3 sm:p-4 md:p-6 hover:border-black/30 transition-all hover-lift">
-                    <div class="download-card-emoji">🍎</div>
-                    <div class="download-card-title">macOS</div>
-                    <div class="download-card-subtitle">Apple Silicon (M1+)</div>
-                </a>
+            <div class="max-w-3xl mx-auto space-y-6 sm:space-y-8 pt-4">
+                <!-- macOS -->
+                <div class="text-left">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                        <span class="text-2xl">🍎</span> macOS
+                    </h3>
+                    <div id="macos-downloads" class="space-y-2"></div>
+                </div>
 
-                <a id="download-linux-deb" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-3 sm:p-4 md:p-6 hover:border-black/30 transition-all hover-lift">
-                    <div class="download-card-emoji">🐧</div>
-                    <div class="download-card-title">Debian/Ubuntu</div>
-                    <div class="download-card-subtitle">.deb (x64)</div>
-                </a>
+                <!-- Windows -->
+                <div class="text-left">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                        <span class="text-2xl">🪟</span> Windows
+                    </h3>
+                    <div id="windows-downloads" class="space-y-2"></div>
+                </div>
 
-                <a id="download-linux-rpm" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-3 sm:p-4 md:p-6 hover:border-black/30 transition-all hover-lift">
-                    <div class="download-card-emoji">🦊</div>
-                    <div class="download-card-title">Fedora</div>
-                    <div class="download-card-subtitle">.rpm (x86_64)</div>
-                </a>
-
-                <a id="download-windows-x64" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-3 sm:p-4 md:p-6 hover:border-black/30 transition-all hover-lift">
-                    <div class="download-card-emoji">🪟</div>
-                    <div class="download-card-title">Windows</div>
-                    <div class="download-card-subtitle">x64</div>
-                </a>
-
-                <a id="download-windows-arm" href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="download-card border border-black/10 rounded-lg p-3 sm:p-4 md:p-6 hover:border-black/30 transition-all hover-lift">
-                    <div class="download-card-emoji">🪟</div>
-                    <div class="download-card-title">Windows</div>
-                    <div class="download-card-subtitle">ARM64</div>
-                </a>
+                <!-- Linux -->
+                <div class="text-left">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                        <span class="text-2xl">🐧</span> Linux
+                    </h3>
+                    <div id="linux-downloads" class="space-y-2"></div>
+                </div>
             </div>
 
             <p class="text-xs sm:text-sm text-black/60 pt-4 px-4 sm:px-0">
