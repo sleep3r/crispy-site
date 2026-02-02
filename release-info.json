@@ -1,56 +1,56 @@
 {
-  "version": "v0.2.1",
-  "name": "v0.2.1",
-  "published_at": "2026-02-02T12:16:14Z",
-  "html_url": "https://github.com/sleep3r/crispy/releases/tag/v0.2.1",
+  "version": "v0.3.0",
+  "name": "v0.3.0",
+  "published_at": "2026-02-02T15:08:30Z",
+  "html_url": "https://github.com/sleep3r/crispy/releases/tag/v0.3.0",
   "assets": [
   {
-    "name": "Crispy-0.2.1-1.aarch64.rpm",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy-0.2.1-1.aarch64.rpm"
+    "name": "Crispy-0.3.0-1.aarch64.rpm",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy-0.3.0-1.aarch64.rpm"
   },
   {
-    "name": "Crispy-0.2.1-1.x86_64.rpm",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy-0.2.1-1.x86_64.rpm"
+    "name": "Crispy-0.3.0-1.x86_64.rpm",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy-0.3.0-1.x86_64.rpm"
   },
   {
-    "name": "Crispy_0.2.1_aarch64.AppImage",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy_0.2.1_aarch64.AppImage"
+    "name": "Crispy_0.3.0_aarch64.AppImage",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy_0.3.0_aarch64.AppImage"
   },
   {
-    "name": "Crispy_0.2.1_aarch64.dmg",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy_0.2.1_aarch64.dmg"
+    "name": "Crispy_0.3.0_aarch64.dmg",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy_0.3.0_aarch64.dmg"
   },
   {
-    "name": "Crispy_0.2.1_amd64.AppImage",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy_0.2.1_amd64.AppImage"
+    "name": "Crispy_0.3.0_amd64.AppImage",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy_0.3.0_amd64.AppImage"
   },
   {
-    "name": "Crispy_0.2.1_amd64.deb",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy_0.2.1_amd64.deb"
+    "name": "Crispy_0.3.0_amd64.deb",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy_0.3.0_amd64.deb"
   },
   {
-    "name": "Crispy_0.2.1_arm64-setup.exe",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy_0.2.1_arm64-setup.exe"
+    "name": "Crispy_0.3.0_arm64-setup.exe",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy_0.3.0_arm64-setup.exe"
   },
   {
-    "name": "Crispy_0.2.1_arm64.deb",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy_0.2.1_arm64.deb"
+    "name": "Crispy_0.3.0_arm64.deb",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy_0.3.0_arm64.deb"
   },
   {
-    "name": "Crispy_0.2.1_arm64_en-US.msi",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy_0.2.1_arm64_en-US.msi"
+    "name": "Crispy_0.3.0_arm64_en-US.msi",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy_0.3.0_arm64_en-US.msi"
   },
   {
-    "name": "Crispy_0.2.1_x64-setup.exe",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy_0.2.1_x64-setup.exe"
+    "name": "Crispy_0.3.0_x64-setup.exe",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy_0.3.0_x64-setup.exe"
   },
   {
-    "name": "Crispy_0.2.1_x64_en-US.msi",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy_0.2.1_x64_en-US.msi"
+    "name": "Crispy_0.3.0_x64_en-US.msi",
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy_0.3.0_x64_en-US.msi"
   },
   {
     "name": "Crispy_aarch64.app.tar.gz",
-    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.2.1/Crispy_aarch64.app.tar.gz"
+    "browser_download_url": "https://github.com/sleep3r/crispy/releases/download/v0.3.0/Crispy_aarch64.app.tar.gz"
   }
 ]
 }
