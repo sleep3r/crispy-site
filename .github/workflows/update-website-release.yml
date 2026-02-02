@@ -16,17 +16,23 @@ jobs:
       - name: Get latest release info from crispy repo
         id: release
         run: |
-          # Fetch latest release from sleep3r/crispy repository
+          # Try to fetch latest release first
           RELEASE_DATA=$(curl -s "https://api.github.com/repos/sleep3r/crispy/releases/latest")
           
+          # Check if latest release exists, if not get the first release from all releases
+          if echo "$RELEASE_DATA" | jq -e '.message' > /dev/null 2>&1; then
+            echo "No 'latest' release found, fetching all releases..."
+            RELEASE_DATA=$(curl -s "https://api.github.com/repos/sleep3r/crispy/releases" | jq '.[0]')
+          fi
+          
           # Extract release info
-          RELEASE_TAG=$(echo "$RELEASE_DATA" | jq -r '.tag_name')
-          RELEASE_NAME=$(echo "$RELEASE_DATA" | jq -r '.name')
-          PUBLISHED_AT=$(echo "$RELEASE_DATA" | jq -r '.published_at')
-          HTML_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url')
+          RELEASE_TAG=$(echo "$RELEASE_DATA" | jq -r '.tag_name // "unknown"')
+          RELEASE_NAME=$(echo "$RELEASE_DATA" | jq -r '.name // .tag_name // "unknown"')
+          PUBLISHED_AT=$(echo "$RELEASE_DATA" | jq -r '.published_at // ""')
+          HTML_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url // ""')
           
           # Get download URLs for assets
-          ASSETS=$(echo "$RELEASE_DATA" | jq '.assets | map({name: .name, browser_download_url: .browser_download_url})')
+          ASSETS=$(echo "$RELEASE_DATA" | jq '.assets // [] | map({name: .name, browser_download_url: .browser_download_url})')
           
           # Create JSON with release info
           cat > release-info.json <<EOF
@@ -40,6 +46,7 @@ jobs:
           EOF
           
           echo "Release version: $RELEASE_TAG"
+          echo "Assets count: $(echo "$ASSETS" | jq 'length')"
           cat release-info.json
 
       - name: Commit and push if changed
