@@ -6,6 +6,19 @@
     <title>Crispy — Free AI Meeting Assistant | Record, Transcribe & Understand</title>
     <meta name="description" content="Free forever AI meeting assistant with professional recording, transcription, noise suppression, and AI chat. 100% local and private. No subscriptions, no limits.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Optimized Google Fonts loading -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Preload critical LCP image -->
+    <link rel="preload" as="image" href="screenshot-mobile.webp" type="image/webp" media="(max-width: 768px)">
+    <link rel="preload" as="image" href="screenshot.webp" type="image/webp" media="(min-width: 769px)">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Load latest release info
@@ -36,9 +49,9 @@
                 button.innerHTML = `
                     <div class="flex flex-col">
                         <span class="font-medium text-sm sm:text-base">${label}</span>
-                        <span class="text-xs sm:text-sm text-black/60">${description}</span>
+                        <span class="text-xs sm:text-sm text-black/70">${description}</span>
                     </div>
-                    <span class="text-xs sm:text-sm text-black/60">${asset.name.split('.').pop()}</span>
+                    <span class="text-xs sm:text-sm text-black/70">${asset.name.split('.').pop()}</span>
                 `;
                 return button;
             }
@@ -88,7 +101,9 @@
                 
                 // .deb files
                 debAssets.forEach(asset => {
-                    const arch = asset.name.includes('amd64') ? 'x64' : asset.name.includes('arm64') ? 'ARM64' : 'aarch64';
+                    let arch = 'aarch64';
+                    if (asset.name.includes('amd64')) arch = 'x64';
+                    else if (asset.name.includes('arm64')) arch = 'ARM64';
                     linuxContainer.appendChild(createDownloadButton(asset, `Debian/Ubuntu (${arch})`, asset.name));
                 });
                 
@@ -142,8 +157,6 @@
         });
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
@@ -172,7 +185,10 @@
     <!-- Header -->
     <header class="border-b border-black/10">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <img src="logo.png" alt="Crispy" class="h-8 sm:h-10 md:h-12">
+            <picture>
+                <source srcset="logo-mobile.webp 600w, logo.webp 2528w" type="image/webp" sizes="(max-width: 640px) 128px, (max-width: 768px) 160px, 192px">
+                <img src="logo.png" alt="Crispy" width="2528" height="767" class="h-8 sm:h-10 md:h-12">
+            </picture>
             <nav class="flex items-center gap-4 sm:gap-6 md:gap-8">
                 <a href="#features" class="text-xs sm:text-sm hover:text-black/70 transition-colors">Features</a>
                 <a href="#download" class="text-xs sm:text-sm hover:text-black/70 transition-colors">Download</a>
@@ -181,6 +197,7 @@
         </div>
     </header>
 
+    <main>
     <!-- Hero Section -->
     <section class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24 fade-in">
         <div class="max-w-3xl mx-auto text-center space-y-4 sm:space-y-6">
@@ -190,7 +207,7 @@
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight">
                 record, transcribe,<br/>and understand
             </h1>
-            <p class="text-base sm:text-lg md:text-xl text-black/60 max-w-2xl mx-auto leading-relaxed px-4 sm:px-0">
+            <p class="text-base sm:text-lg md:text-xl text-black/70 max-w-2xl mx-auto leading-relaxed px-4 sm:px-0">
                 Your <strong>free AI meeting companion</strong> with professional-grade recording, AI transcription, noise suppression, and intelligent chat. <strong>No cloud, no limits, no tracking.</strong>
             </p>
             <div class="pt-2 sm:pt-4">
@@ -200,7 +217,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </a>
-                <p class="text-xs sm:text-sm text-black/50 mt-3 sm:mt-4">
+                <p class="text-xs sm:text-sm text-black/70 mt-3 sm:mt-4">
                     macOS, Linux, Windows • Open source • MIT licensed
                 </p>
             </div>
@@ -210,7 +227,10 @@
     <!-- Screenshot -->
     <section class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 fade-in">
         <div class="rounded-xl sm:rounded-2xl border border-black/10 overflow-hidden shadow-2xl">
-            <img src="screenshot.png" alt="Crispy App Interface" class="w-full h-auto">
+            <picture>
+                <source srcset="screenshot-mobile.webp 800w, screenshot.webp 1664w" type="image/webp" sizes="(max-width: 768px) 100vw, 896px">
+                <img src="screenshot.png" alt="Crispy App Interface" width="1664" height="1584" fetchpriority="high" class="w-full h-auto">
+            </picture>
         </div>
     </section>
 
@@ -218,13 +238,13 @@
     <section id="features" class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24 fade-in">
         <div class="text-center mb-8 sm:mb-12">
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Everything you need. Nothing you don't.</h2>
-            <p class="text-sm sm:text-base text-black/60">Professional features without the enterprise price tag</p>
+            <p class="text-sm sm:text-base text-black/70">Professional features without the enterprise price tag</p>
         </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             <div class="space-y-2 sm:space-y-3">
                 <div class="text-2xl sm:text-3xl">🎙️</div>
                 <h3 class="text-lg sm:text-xl font-semibold">Studio-Quality Recording</h3>
-                <p class="text-black/60 text-sm leading-relaxed">
+                <p class="text-black/70 text-sm leading-relaxed">
                     Capture mic and system audio simultaneously in crystal-clear 48kHz stereo. Professional-grade, zero setup.
                 </p>
             </div>
@@ -232,7 +252,7 @@
             <div class="space-y-2 sm:space-y-3">
                 <div class="text-2xl sm:text-3xl">🔇</div>
                 <h3 class="text-lg sm:text-xl font-semibold">AI Noise Suppression</h3>
-                <p class="text-black/60 text-sm leading-relaxed">
+                <p class="text-black/70 text-sm leading-relaxed">
                     Powered by RNNoise AI. Remove background noise, keyboard clicks, and distractions. Sound professional anywhere.
                 </p>
             </div>
@@ -240,7 +260,7 @@
             <div class="space-y-2 sm:space-y-3">
                 <div class="text-2xl sm:text-3xl">✍️</div>
                 <h3 class="text-lg sm:text-xl font-semibold">Smart Transcription</h3>
-                <p class="text-black/60 text-sm leading-relaxed">
+                <p class="text-black/70 text-sm leading-relaxed">
                     Choose from Whisper, Parakeet, or Moonshine AI models. Accurate speech-to-text that runs 100% locally.
                 </p>
             </div>
@@ -248,7 +268,7 @@
             <div class="space-y-2 sm:space-y-3">
                 <div class="text-2xl sm:text-3xl">💬</div>
                 <h3 class="text-lg sm:text-xl font-semibold">AI Chat Assistant</h3>
-                <p class="text-black/60 text-sm leading-relaxed">
+                <p class="text-black/70 text-sm leading-relaxed">
                     Ask anything about your recordings. Summarize meetings, extract insights, generate action items instantly.
                 </p>
             </div>
@@ -256,7 +276,7 @@
             <div class="space-y-2 sm:space-y-3">
                 <div class="text-2xl sm:text-3xl">🔒</div>
                 <h3 class="text-lg sm:text-xl font-semibold">100% Private by Design</h3>
-                <p class="text-black/60 text-sm leading-relaxed">
+                <p class="text-black/70 text-sm leading-relaxed">
                     All processing happens locally on your machine. Your audio never touches the cloud. Zero tracking, zero sharing.
                 </p>
             </div>
@@ -264,7 +284,7 @@
             <div class="space-y-2 sm:space-y-3">
                 <div class="text-2xl sm:text-3xl">⚡</div>
                 <h3 class="text-lg sm:text-xl font-semibold">Lightning Fast & Native</h3>
-                <p class="text-black/60 text-sm leading-relaxed">
+                <p class="text-black/70 text-sm leading-relaxed">
                     Built with Rust and Tauri. Native desktop performance with minimal resource usage. Launch in milliseconds.
                 </p>
             </div>
@@ -272,7 +292,7 @@
             <div class="space-y-2 sm:space-y-3">
                 <div class="text-2xl sm:text-3xl">🎨</div>
                 <h3 class="text-lg sm:text-xl font-semibold">Effortlessly Simple</h3>
-                <p class="text-black/60 text-sm leading-relaxed">
+                <p class="text-black/70 text-sm leading-relaxed">
                     Clean interface. One-click recording from system tray. No distractions, just your work. It just works.
                 </p>
             </div>
@@ -280,7 +300,7 @@
             <div class="space-y-2 sm:space-y-3">
                 <div class="text-2xl sm:text-3xl">🌐</div>
                 <h3 class="text-lg sm:text-xl font-semibold">Truly Open Source</h3>
-                <p class="text-black/60 text-sm leading-relaxed">
+                <p class="text-black/70 text-sm leading-relaxed">
                     MIT licensed. Contribute, customize, and make it yours. Built by the community, for everyone.
                 </p>
             </div>
@@ -292,21 +312,21 @@
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-8 sm:mb-12">
                 <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Why pay $15-30/month when you can have it free?</h2>
-                <p class="text-sm sm:text-base text-black/60">Get the same AI-powered features as enterprise tools. No subscriptions, no limits.</p>
+                <p class="text-sm sm:text-base text-black/70">Get the same AI-powered features as enterprise tools. No subscriptions, no limits.</p>
             </div>
             
             <div class="grid sm:grid-cols-3 gap-4 sm:gap-6 bg-black/5 rounded-2xl p-6 sm:p-8">
                 <div class="text-center">
                     <div class="text-3xl sm:text-4xl font-bold mb-2">$0</div>
-                    <div class="text-xs sm:text-sm text-black/60">Forever free</div>
+                    <div class="text-xs sm:text-sm text-black/70">Forever free</div>
                 </div>
                 <div class="text-center border-l border-r border-black/10 px-4">
                     <div class="text-3xl sm:text-4xl font-bold mb-2">100%</div>
-                    <div class="text-xs sm:text-sm text-black/60">Local & private</div>
+                    <div class="text-xs sm:text-sm text-black/70">Local & private</div>
                 </div>
                 <div class="text-center">
                     <div class="text-3xl sm:text-4xl font-bold mb-2">∞</div>
-                    <div class="text-xs sm:text-sm text-black/60">Unlimited recordings</div>
+                    <div class="text-xs sm:text-sm text-black/70">Unlimited recordings</div>
                 </div>
             </div>
         </div>
@@ -316,7 +336,7 @@
     <section id="download" class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24 fade-in">
         <div class="text-center space-y-6 sm:space-y-8">
             <h2 class="text-3xl sm:text-4xl font-bold">Start recording smarter. For free.</h2>
-            <p class="text-sm sm:text-base text-black/60 px-4 sm:px-0">
+            <p class="text-sm sm:text-base text-black/70 px-4 sm:px-0">
                 No credit card. No trials. No limits. Download once, use forever.
                 <span class="release-version text-xs sm:text-sm font-mono ml-2 inline-block mt-1"></span>
             </p>
@@ -347,7 +367,7 @@
                 </div>
             </div>
 
-            <p class="text-xs sm:text-sm text-black/60 pt-4 px-4 sm:px-0">
+            <p class="text-xs sm:text-sm text-black/70 pt-4 px-4 sm:px-0">
                 Or build from source: 
                 <a href="https://github.com/sleep3r/crispy" class="underline hover:text-black transition-colors">GitHub Repository</a>
             </p>
@@ -369,22 +389,23 @@
             </a>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer class="border-t border-black/10 mt-12 sm:mt-16 md:mt-24">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="text-xs sm:text-sm text-black/60">
+                <div class="text-xs sm:text-sm text-black/70">
                     Made with ❤️ by the Crispy community
                 </div>
                 <div class="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm">
-                    <a href="https://github.com/sleep3r/crispy" target="_blank" class="text-black/60 hover:text-black transition-colors">
+                    <a href="https://github.com/sleep3r/crispy" target="_blank" class="text-black/70 hover:text-black transition-colors">
                         GitHub
                     </a>
-                    <a href="https://github.com/sleep3r/crispy/issues" target="_blank" class="text-black/60 hover:text-black transition-colors">
+                    <a href="https://github.com/sleep3r/crispy/issues" target="_blank" class="text-black/70 hover:text-black transition-colors">
                         Issues
                     </a>
-                    <a href="https://github.com/sleep3r/crispy/blob/main/LICENSE" target="_blank" class="text-black/60 hover:text-black transition-colors">
+                    <a href="https://github.com/sleep3r/crispy/blob/main/LICENSE" target="_blank" class="text-black/70 hover:text-black transition-colors">
                         MIT License
                     </a>
                 </div>
