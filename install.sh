@@ -66,12 +66,12 @@ info "Fetching latest release info..."
 
 # Try release-info.json on the site first, then GitHub API
 if RELEASE_JSON="$(fetch_text "https://crispy.fyi/release-info.json" 2>/dev/null)"; then
-    VERSION="$(printf '%s' "$RELEASE_JSON" | grep -o '"version" *: *"[^"]*"' | head -1 | grep -o '"v[^"]*"' | tr -d '"')"
+    VERSION="$(printf '%s' "$RELEASE_JSON" | grep -o '"version" *: *"[^"]*"' | head -1 | grep -o '"v[0-9][^"]*"' | tr -d '"')"
 fi
 
 if [ -z "$VERSION" ]; then
     if RELEASE_JSON="$(fetch_text "https://api.github.com/repos/sleep3r/crispy/releases/latest" 2>/dev/null)"; then
-        VERSION="$(printf '%s' "$RELEASE_JSON" | grep -o '"tag_name" *: *"[^"]*"' | head -1 | grep -o '"v[^"]*"' | tr -d '"')"
+        VERSION="$(printf '%s' "$RELEASE_JSON" | grep -o '"tag_name" *: *"[^"]*"' | head -1 | grep -o '"v[0-9][^"]*"' | tr -d '"')"
     fi
 fi
 
