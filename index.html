@@ -89,36 +89,7 @@
                 });
             }
             
-            // Populate Linux downloads
-            const linuxContainer = document.getElementById('linux-downloads');
-            if (linuxContainer && linuxAssets.length > 0) {
-                linuxContainer.innerHTML = '';
-                
-                // Sort: .deb, .rpm, .AppImage
-                const debAssets = linuxAssets.filter(a => a.name.endsWith('.deb'));
-                const rpmAssets = linuxAssets.filter(a => a.name.endsWith('.rpm'));
-                const appimageAssets = linuxAssets.filter(a => a.name.endsWith('.AppImage'));
-                
-                // .deb files
-                debAssets.forEach(asset => {
-                    let arch = 'aarch64';
-                    if (asset.name.includes('amd64')) arch = 'x64';
-                    else if (asset.name.includes('arm64')) arch = 'ARM64';
-                    linuxContainer.appendChild(createDownloadButton(asset, `Debian/Ubuntu (${arch})`, asset.name));
-                });
-                
-                // .rpm files
-                rpmAssets.forEach(asset => {
-                    const arch = asset.name.includes('x86_64') ? 'x86_64' : 'aarch64';
-                    linuxContainer.appendChild(createDownloadButton(asset, `Fedora/RHEL (${arch})`, asset.name));
-                });
-                
-                // AppImage files
-                appimageAssets.forEach(asset => {
-                    const arch = asset.name.includes('amd64') ? 'x64' : 'aarch64';
-                    linuxContainer.appendChild(createDownloadButton(asset, `AppImage (${arch})`, asset.name));
-                });
-            }
+            // Linux downloads are handled by the curl-to-bash install script
         }
         
         async function fetchJson(url) {
@@ -363,7 +334,15 @@
                     <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2">
                         <span class="text-2xl">🐧</span> Linux
                     </h3>
-                    <div id="linux-downloads" class="space-y-2"></div>
+                    <p class="text-sm text-black/70 mb-3">One command to install — auto-detects your distro and architecture:</p>
+                    <div class="relative group">
+                        <pre class="bg-black text-green-400 rounded-lg px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-mono overflow-x-auto select-all cursor-pointer" id="linux-install-cmd" onclick="navigator.clipboard.writeText(this.textContent.trim());var t=document.getElementById('copy-toast');t.classList.remove('opacity-0');t.classList.add('opacity-100');setTimeout(function(){t.classList.remove('opacity-100');t.classList.add('opacity-0')},1500)">curl -sL https://crispy.fyi/install.sh | sudo bash</pre>
+                        <span id="copy-toast" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-3 py-1 rounded-full opacity-0 transition-opacity pointer-events-none">Copied!</span>
+                    </div>
+                    <p class="text-xs text-black/50 mt-2">
+                        Supports Debian/Ubuntu (.deb), Fedora/RHEL (.rpm) and AppImage fallback.
+                        <a href="https://github.com/sleep3r/crispy/releases/latest" target="_blank" class="underline hover:text-black transition-colors">Manual download →</a>
+                    </p>
                 </div>
             </div>
 
