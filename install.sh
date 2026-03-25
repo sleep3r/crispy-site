@@ -7,18 +7,19 @@
 
 set -e
 
-# ── Colours ──────────────────────────────────────────────────
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-BOLD='\033[1m'
-NC='\033[0m'
+# ── Colours (generate real ESC sequences, works in dash/bash/zsh) ────
+ESC=$(printf '\033')
+RED="${ESC}[0;31m"
+GREEN="${ESC}[0;32m"
+YELLOW="${ESC}[1;33m"
+CYAN="${ESC}[0;36m"
+BOLD="${ESC}[1m"
+NC="${ESC}[0m"
 
-info()  { printf "${CYAN}[INFO]${NC}  %s\n" "$1"; }
-ok()    { printf "${GREEN}[  OK]${NC}  %s\n" "$1"; }
-warn()  { printf "${YELLOW}[WARN]${NC}  %s\n" "$1"; }
-fail()  { printf "${RED}[FAIL]${NC}  %s\n" "$1"; exit 1; }
+info()  { printf "%s[INFO]%s  %s\n" "$CYAN" "$NC" "$1"; }
+ok()    { printf "%s[  OK]%s  %s\n" "$GREEN" "$NC" "$1"; }
+warn()  { printf "%s[WARN]%s  %s\n" "$YELLOW" "$NC" "$1"; }
+fail()  { printf "%s[FAIL]%s  %s\n" "$RED" "$NC" "$1"; exit 1; }
 
 # ── Root check ───────────────────────────────────────────────
 if [ "$(id -u)" -ne 0 ]; then
@@ -34,29 +35,42 @@ case "$ARCH" in
 esac
 info "Architecture: ${BOLD}${ARCH_LABEL}${NC}"
 
-# ── Fetch latest version ────────────────────────────────────
-RELEASE_JSON=""
-VERSION=""
-
-fetch_release() {
+# ── Download helper ──────────────────────────────────────────
+download() {
+    # $1 = URL, $2 = output path
     if command -v curl >/dev/null 2>&1; then
-        RELEASE_JSON="$(curl -sL "$1")" || return 1
+        curl -fSL --progress-bar -o "$2" "$1"
     elif command -v wget >/dev/null 2>&1; then
-        RELEASE_JSON="$(wget -qO- "$1")" || return 1
+        wget --show-progress -qO "$2" "$1"
     else
         fail "Neither curl nor wget found. Please install one of them."
     fi
 }
 
+fetch_text() {
+    # $1 = URL → stdout
+    if command -v curl >/dev/null 2>&1; then
+        curl -fsSL "$1"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -qO- "$1"
+    else
+        fail "Neither curl nor wget found. Please install one of them."
+    fi
+}
+
+# ── Fetch latest version ────────────────────────────────────
+RELEASE_JSON=""
+VERSION=""
+
 info "Fetching latest release info..."
 
 # Try release-info.json on the site first, then GitHub API
-if fetch_release "https://crispy.fyi/release-info.json"; then
+if RELEASE_JSON="$(fetch_text "https://crispy.fyi/release-info.json" 2>/dev/null)"; then
     VERSION="$(printf '%s' "$RELEASE_JSON" | grep -o '"version" *: *"[^"]*"' | head -1 | grep -o '"v[^"]*"' | tr -d '"')"
 fi
 
 if [ -z "$VERSION" ]; then
-    if fetch_release "https://api.github.com/repos/sleep3r/crispy/releases/latest"; then
+    if RELEASE_JSON="$(fetch_text "https://api.github.com/repos/sleep3r/crispy/releases/latest" 2>/dev/null)"; then
         VERSION="$(printf '%s' "$RELEASE_JSON" | grep -o '"tag_name" *: *"[^"]*"' | head -1 | grep -o '"v[^"]*"' | tr -d '"')"
     fi
 fi
@@ -78,10 +92,8 @@ install_deb() {
     TMP_DEB="/tmp/${DEB_FILE}"
 
     info "Downloading ${BOLD}${DEB_FILE}${NC}..."
-    if command -v curl >/dev/null 2>&1; then
-        curl -sL -o "$TMP_DEB" "$DEB_URL"
-    else
-        wget -qO "$TMP_DEB" "$DEB_URL"
+    if ! download "$DEB_URL" "$TMP_DEB"; then
+        fail "Failed to download ${DEB_FILE}. Check your internet connection."
     fi
 
     info "Installing via dpkg..."
@@ -98,10 +110,8 @@ install_rpm() {
     TMP_RPM="/tmp/${RPM_FILE}"
 
     info "Downloading ${BOLD}${RPM_FILE}${NC}..."
-    if command -v curl >/dev/null 2>&1; then
-        curl -sL -o "$TMP_RPM" "$RPM_URL"
-    else
-        wget -qO "$TMP_RPM" "$RPM_URL"
+    if ! download "$RPM_URL" "$TMP_RPM"; then
+        fail "Failed to download ${RPM_FILE}. Check your internet connection."
     fi
 
     info "Installing via rpm..."
@@ -127,10 +137,8 @@ install_appimage() {
     info "Downloading ${BOLD}${AI_FILE}${NC}..."
     mkdir -p "$INSTALL_DIR"
 
-    if command -v curl >/dev/null 2>&1; then
-        curl -sL -o "$DEST" "$AI_URL"
-    else
-        wget -qO "$DEST" "$AI_URL"
+    if ! download "$AI_URL" "$DEST"; then
+        fail "Failed to download ${AI_FILE}. Check your internet connection."
     fi
 
     chmod +x "$DEST"
@@ -149,4 +157,4 @@ else
     install_appimage
 fi
 
-printf "\n${GREEN}${BOLD}✔ Done!${NC} Launch Crispy from your applications menu or run ${BOLD}crispy${NC} in the terminal.\n"
+printf "\n%s%s✔ Done!%s Launch Crispy from your applications menu or run %scrispy%s in the terminal.\n" "$GREEN" "$BOLD" "$NC" "$BOLD" "$NC"
